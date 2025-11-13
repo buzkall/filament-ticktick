@@ -1,0 +1,23 @@
+{
+  "name": "buzkall/filament-ticktick",
+  "description": "Filament package integrating TickTick API using buzkall/ticktick",
+  "type": "library",
+  "require": {
+    "php": "^8.2|^8.3",
+    "buzkall/laravel-ticktick": "^0.0.1",
+    "filament/filament": "^4.0",
+    "spatie/laravel-package-tools": "^1.16"
+  },
+  "autoload": {
+    "psr-4": {
+      "Buzkall\\FilamentTicktick\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Buzkall\\FilamentTicktick\\FilamentTicktickServiceProvider"
+      ]
+    }
+  }
+}
