@@ -1,8 +1,9 @@
 <?php
 
-namespace Buzkall\FilamentTicktick\Resources\TickTickTasks\Pages;
+namespace Arzcode\FilamentTicktick\Resources\TickTickTasks\Pages;
 
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\TickTickTaskResource;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Actions\PullTasksAction;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\TickTickTaskResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
@@ -13,6 +14,8 @@ class ListTickTickTasks extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            PullTasksAction::make(),
+
             CreateAction::make(),
         ];
     }

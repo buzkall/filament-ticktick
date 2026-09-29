@@ -5,14 +5,14 @@ return [
         'abandoned' => 'Abandonada',
         'active'    => 'Activa',
         'completed' => 'Completada',
-        'label'     => 'Estado',
+        'label'     => 'Estat',
     ],
 
     'task_priority' => [
-        'none'   => 'Ninguna',
-        'low'    => 'Baja',
-        'medium' => 'Media',
+        'none'   => 'Cap',
+        'low'    => 'Baixa',
+        'medium' => 'Mitjana',
         'high'   => 'Alta',
-        'label'  => 'Prioridad',
+        'label'  => 'Prioritat',
     ],
 ];

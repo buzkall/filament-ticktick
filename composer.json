@@ -1,23 +1,57 @@
 {
-  "name": "buzkall/filament-ticktick",
-  "description": "Filament package integrating TickTick API using buzkall/ticktick",
+  "name": "arzcode/filament-ticktick",
+  "description": "Filament package integrating TickTick API using arzcode/laravel-ticktick",
   "type": "library",
+  "license": "MIT",
   "require": {
-    "php": "^8.2|^8.3",
-    "buzkall/laravel-ticktick": "^0.0.1",
-    "filament/filament": "^4.0",
+    "php": "^8.4",
+    "arzcode/laravel-ticktick": "dev-main",
+    "filament/filament": "^4.0|^5.0",
+    "illuminate/contracts": "^12.0|^13.0",
     "spatie/laravel-package-tools": "^1.16"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "^1.0",
+    "orchestra/testbench": "^10.0|^11.0",
+    "pestphp/pest": "^4.0|^5.0",
+    "pestphp/pest-plugin-laravel": "^4.0|^5.0",
+    "pestphp/pest-plugin-livewire": "^4.0|^5.0"
   },
   "autoload": {
     "psr-4": {
-      "Buzkall\\FilamentTicktick\\": "src/"
+      "Arzcode\\FilamentTicktick\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Arzcode\\FilamentTicktick\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "format": "vendor/bin/pint",
+    "format-check": "vendor/bin/pint --test",
+    "analyse": "vendor/bin/phpstan analyse --memory-limit=1G"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Buzkall\\FilamentTicktick\\FilamentTicktickServiceProvider"
+        "Arzcode\\FilamentTicktick\\FilamentTicktickServiceProvider"
       ]
     }
-  }
+  },
+  "repositories": [
+    {
+      "name": "laravel-ticktick",
+      "type": "path",
+      "url": "/Users/buzkall/Code/arzcode/laravel-ticktick"
+    }
+  ]
 }

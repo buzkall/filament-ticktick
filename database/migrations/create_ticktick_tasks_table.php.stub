@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('ticktick_tasks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('ticktick_tasks')->cascadeOnDelete();
             $table->string('title');
             $table->text('content')->nullable();
             $table->timestamp('start_date')->nullable();

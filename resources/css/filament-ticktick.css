@@ -1,0 +1,32 @@
+/*
+ * Filament TickTick raw plugin styles.
+ *
+ * This file ships as-is, with no Tailwind build step, so it only targets
+ * Filament's own classes and CSS variables.
+ */
+
+/* Project select: folders as gray headings, their projects indented below */
+.fi-ticktick-project-select .fi-select-input-option-group > .fi-dropdown-header {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+}
+
+.dark .fi-ticktick-project-select .fi-select-input-option-group > .fi-dropdown-header {
+    background-color: var(--gray-800);
+    color: var(--gray-200);
+}
+
+.fi-ticktick-project-select .fi-select-input-option-group .fi-select-input-option {
+    padding-inline-start: calc(var(--spacing) * 7);
+}
+
+/* Priority dot before the task title */
+.fi-ticktick-priority-dot {
+    display: inline-block;
+    width: calc(var(--spacing) * 2.5);
+    height: calc(var(--spacing) * 2.5);
+    margin-inline-end: calc(var(--spacing) * 1.5);
+    border-radius: 9999px;
+    background-color: var(--dot-color);
+    vertical-align: middle;
+}

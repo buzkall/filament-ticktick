@@ -12,3 +12,4 @@ phpunit.xml
 .DS_Store
 Thumbs.db
 /.claude/
+/build

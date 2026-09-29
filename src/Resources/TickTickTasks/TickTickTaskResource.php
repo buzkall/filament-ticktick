@@ -1,23 +1,30 @@
 <?php
 
-namespace Buzkall\FilamentTicktick\Resources\TickTickTasks;
+namespace Arzcode\FilamentTicktick\Resources\TickTickTasks;
 
-use Buzkall\FilamentTicktick\Models\TickTickTask;
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\Pages\CreateTickTickTask;
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\Pages\EditTickTickTask;
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\Pages\ListTickTickTasks;
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\Schemas\TickTickTaskForm;
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\Tables\TickTickTasksTable;
+use Arzcode\FilamentTicktick\Models\TickTickTask;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Pages\CreateTickTickTask;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Pages\EditTickTickTask;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Pages\ListTickTickTasks;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\RelationManagers\SubtasksRelationManager;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Schemas\TickTickTaskForm;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\Tables\TickTickTasksTable;
+use Arzcode\TickTick\Exceptions\TickTickException;
+use Arzcode\TickTick\TickTick;
 use BackedEnum;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use GuzzleHttp\Exception\ConnectException;
 
 class TickTickTaskResource extends Resource
 {
     protected static ?string $model = TickTickTask::class;
+    protected static ?string $slug = 'ticktick-tasks';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static bool $hasTitleCaseModelLabel = false;
 
     public static function getModelLabel(): string
     {
@@ -44,6 +51,13 @@ class TickTickTaskResource extends Resource
         return TickTickTasksTable::configure($table);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            SubtasksRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
@@ -51,5 +65,40 @@ class TickTickTaskResource extends Resource
             'create' => CreateTickTickTask::route('/create'),
             'edit'   => EditTickTickTask::route('/{record}/edit'),
         ];
+    }
+
+    public static function notifyFailure(TickTickException $exception): void
+    {
+        Notification::make()
+            ->title(__('filament-ticktick::resource.notifications.failed'))
+            ->body(static::failureMessage($exception))
+            ->danger()
+            ->persistent()
+            ->send();
+    }
+
+    /**
+     * The exception messages come from arzcode/laravel-ticktick in English, so
+     * known failures are mapped to translated messages and the rest are reported.
+     */
+    public static function failureMessage(TickTickException $exception): string
+    {
+        $status = $exception->getStatusCode();
+
+        $reason = match (true) {
+            blank(app(TickTick::class)->getAccessToken())         => 'missing_token',
+            $exception->getPrevious() instanceof ConnectException => 'connection',
+            in_array($status, [401, 403], true)                   => 'unauthorized',
+            $status === 404                                       => 'not_found',
+            $status === 429                                       => 'rate_limited',
+            $status >= 500                                        => 'server_error',
+            default                                               => 'unexpected',
+        };
+
+        if ($reason === 'unexpected') {
+            report($exception);
+        }
+
+        return __("filament-ticktick::resource.notifications.errors.{$reason}");
     }
 }

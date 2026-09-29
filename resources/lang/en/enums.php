@@ -2,16 +2,17 @@
 
 return [
     'task_status' => [
-        'active' => 'Active',
+        'abandoned' => 'Abandoned',
+        'active'    => 'Active',
         'completed' => 'Completed',
-        'label' => 'Status',
+        'label'     => 'Status',
     ],
 
     'task_priority' => [
-        'none' => 'None',
-        'low' => 'Low',
+        'none'   => 'None',
+        'low'    => 'Low',
         'medium' => 'Medium',
-        'high' => 'High',
-        'label' => 'Priority',
+        'high'   => 'High',
+        'label'  => 'Priority',
     ],
 ];

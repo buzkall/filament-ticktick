@@ -1,8 +1,8 @@
 <?php
 
-namespace Buzkall\FilamentTicktick;
+namespace Arzcode\FilamentTicktick;
 
-use Buzkall\FilamentTicktick\Resources\TickTickTasks\TickTickTaskResource;
+use Arzcode\FilamentTicktick\Resources\TickTickTasks\TickTickTaskResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
@@ -33,6 +33,9 @@ class FilamentTicktickPlugin implements Plugin
 
     public static function get(): static
     {
-        return filament(app(static::class)->getId());
+        /** @var static $plugin */
+        $plugin = filament(app(static::class)->getId());
+
+        return $plugin;
     }
 }
