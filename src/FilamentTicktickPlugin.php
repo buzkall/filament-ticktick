@@ -28,13 +28,16 @@ class FilamentTicktickPlugin implements Plugin
 
     public static function make(): static
     {
-        return app(static::class);
+        /** @var static $plugin */
+        $plugin = app(static::class);
+
+        return $plugin;
     }
 
     public static function get(): static
     {
         /** @var static $plugin */
-        $plugin = filament(app(static::class)->getId());
+        $plugin = filament(static::make()->getId());
 
         return $plugin;
     }

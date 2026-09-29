@@ -15,20 +15,27 @@ class DeleteTasksBulkAction extends DeleteBulkAction
     {
         parent::setUp();
 
-        // each task is deleted in TickTick first, and kept locally when that fails
-        $this->using(function(DeleteBulkAction $action, Collection $records): void {
-            $records->each(function(TickTickTask $record) use ($action): void {
-                try {
-                    app(TickTickService::class)->delete($record);
-                } catch (TickTickException $exception) {
-                    $message = TickTickTaskResource::failureMessage($exception);
-                    $action->reportBulkProcessingFailure($message, $message);
+        $this->using(fn(DeleteBulkAction $action, Collection $records) => $this->deleteRecords($action, $records));
+    }
 
-                    return;
-                }
+    /**
+     * Each task is deleted in TickTick first, and kept locally when that fails.
+     *
+     * @param  Collection<int, TickTickTask>  $records
+     */
+    protected function deleteRecords(DeleteBulkAction $action, Collection $records): void
+    {
+        $records->each(function(TickTickTask $record) use ($action): void {
+            try {
+                app(TickTickService::class)->delete($record);
+            } catch (TickTickException $exception) {
+                $message = TickTickTaskResource::failureMessage($exception);
+                $action->reportBulkProcessingFailure($message, $message);
 
-                $record->delete();
-            });
+                return;
+            }
+
+            $record->delete();
         });
     }
 }

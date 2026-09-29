@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Arr;
 
 class PullTasksAction extends Action
 {
@@ -39,7 +40,7 @@ class PullTasksAction extends Action
             ])
             ->action(function(array $data): void {
                 try {
-                    $count = app(TickTickService::class)->pull($data['projects']);
+                    $count = app(TickTickService::class)->pull(array_values(array_filter(Arr::wrap($data['projects'] ?? []), is_string(...))));
                 } catch (TickTickException $exception) {
                     TickTickTaskResource::notifyFailure($exception);
 

@@ -150,7 +150,7 @@ class PanelProviders
         // the comma goes right after the last entry, not after a comment that follows it
         $lastToken = self::lastTokenBefore($contents, $closeAt);
 
-        if (! in_array($lastToken->text, [',', '['], true)) {
+        if ($lastToken && ! in_array($lastToken->text, [',', '['], true)) {
             $afterToken = $lastToken->pos + strlen($lastToken->text);
             $contents = substr($contents, 0, $afterToken) . ',' . substr($contents, $afterToken);
             $closeAt++;
@@ -179,7 +179,7 @@ class PanelProviders
         return substr($contents, 0, $semicolonAt) . $insertion . substr($contents, $semicolonAt);
     }
 
-    protected static function lastTokenBefore(string $contents, int $position): PhpToken
+    protected static function lastTokenBefore(string $contents, int $position): ?PhpToken
     {
         $last = null;
 

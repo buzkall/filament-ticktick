@@ -12,6 +12,7 @@ use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -45,6 +46,9 @@ class TickTickTaskForm
             ]);
     }
 
+    /**
+     * @return array<int, Component>
+     */
     protected static function mainComponents(): array
     {
         return [
@@ -60,16 +64,23 @@ class TickTickTaskForm
         ];
     }
 
+    /**
+     * @return array<int, Component>
+     */
     protected static function sidebarComponents(): array
     {
         return [
             Select::make('project_id')
                 ->label(__('filament-ticktick::resource.fields.project_id'))
                 ->placeholder(__('filament-ticktick::resource.fields.inbox'))
-                ->options(fn(?TickTickTask $record): array => app(TickTickService::class)->getProjectOptions()
-                    + (str_starts_with($record->project_id ?? '', 'inbox')
-                        ? [$record->project_id => __('filament-ticktick::resource.fields.inbox')]
-                        : []))
+                ->options(function(?TickTickTask $record): array {
+                    $options = app(TickTickService::class)->getProjectOptions();
+                    $projectId = $record?->project_id;
+
+                    return $projectId !== null && str_starts_with($projectId, 'inbox')
+                        ? $options + [$projectId => __('filament-ticktick::resource.fields.inbox')]
+                        : $options;
+                })
                 // an existing task can be moved to another project, but not out of every project
                 ->selectablePlaceholder(fn(string $operation): bool => $operation === 'create')
                 ->searchable()
@@ -84,6 +95,9 @@ class TickTickTaskForm
         ];
     }
 
+    /**
+     * @return array<int, Component>
+     */
     protected static function detailComponents(): array
     {
         return [
